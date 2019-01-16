@@ -188,9 +188,6 @@ varMin(noExRxns) = [];
 varMax(noExRxns) = [];
 % get all drains without the set bnds
 isDrainNew = isDrain(~ismember(isDrain,varID));
-% retrieve the actual metabolite IDs for carbon calculations
-metID_tmp = find(model.S(:,varID));
-[metID,~] = ind2sub(size(model.S),metID_tmp); % index to coordinates
 
 %% check if number of carbon atoms per metabolite was passed into function
 if exist('carbonCount','var')
@@ -205,8 +202,12 @@ metCarb = carbonCount.carbonAtoms;
 
 %% multiply the lower and upper bnds witht their respective number of carbon
 % atoms
-metID = unique(metID);
-varMinCarb = varMin.*metCarb(metID);
+for i = 1:size(varID,1)
+    metID = find(model.S(:,varID(i,1)));
+    atomCount(i,1) = sum(carbonCount.carbonAtoms(metID,1));
+end
+varMinCarb = varMin.*atomCount;
+
 % varMaxCarb = varMax.*metCarb(metID);
 if exist('totalCarbon','var')
     if isempty(totalCarbon)
@@ -221,9 +222,9 @@ if exist('totalCarbon','var')
 else
     total_carbon_cons = abs(sum(varMinCarb(varMinCarb<0)));
 end
-%% check if cofactorPairs have been passed on and set cofactors to 0 in model.S
 
-% check for cofPari variable and/or calculate new
+%% check if cofactorPairs have been passed on and set cofactors to 0 in model.S
+% check for cofPair variable and/or calculate new
 if exist('cofPairs','var')
     if isempty(cofPairs)
         smallMets = findSmallMets(model);
