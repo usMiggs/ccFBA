@@ -21,7 +21,14 @@ function cStruc = findMetCarbon(model)
 %                       accurate in carbon count 
 %                       (COFULLR2COFULLR1 etc.)
 %
-%
+%       2019-03-22      Updated function to catch       MLU
+%                       metFormulas such as
+%                       'C2H4NO2RC2H2NOR' which 
+%                       include two C2s and therfore
+%                       have 4 carbons, code would
+%                       fail as this was not 
+%                       encountered before (happened
+%                       with iMM904 model)
 %
 %
 
@@ -61,6 +68,15 @@ for i = 1:size(ia,1)
     carbon_tmp = regexp(metForm(i,1),'(?<=C)\d+','match');
     % this might fail as there are metabolites such as CH3, where capital C
     % is followed by a letter
+    
+    % edited for the case of a met folula such as 'C2H4NO2RC2H2NOR' whihc
+    % includes two C2 atoms as one belongs to the R group
+    if size(carbon_tmp{1,1},2) > 1
+        c_tmp = carbon_tmp;
+        s_c_tmp = sum(str2double(carbon_tmp{1,1}));
+        clear carbon_tmp
+        carbon_tmp{1,1} = int2str(s_c_tmp);
+    end
     if isempty(carbon_tmp{1,1})
         carbon_tmp{1,1} = 0;
     end

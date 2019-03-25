@@ -47,7 +47,7 @@ end
 
 
 % resetting model bnds
-for i = 1:size(model.rxns)
+for i = 1:size(model.rxns,1)
     if rev(i,1) == 1
         model.lb(i,1) = -abs(bnd);
         model.ub(i,1) = abs(bnd);

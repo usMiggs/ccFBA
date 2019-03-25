@@ -1,10 +1,4 @@
 function cofactorPairs = findCofactorPairs_max(model,metPairs,E,e)
-
- 
- 
- 
- 
- 
  
 % pattern = {'nadh';'nadph';'atp';'gtp';'ctp';'utp';'ttp';'fadh2'};
 pattern = {'nadh';'nadph';'atp';'gtp';'fadh2'};
@@ -64,18 +58,18 @@ cP = [];
 for i = 1:size(metPairs,1)
     metPair = metPairs{i,6};
     metPair = cell2mat(metPair);
-    if E(metPair(1,1),s) == 0
+    %if E(metPair(1,1),s) == 0
         if E(metPair(1,1),p) ~= 0
             vec = bsxfun(@minus,E(metPair(1,1),:),E(metPair(2,1),:));
             vec2 = find(vec);
-            if size(vec2,1) < 3
+            if size(vec2,2) < 3
                 if ismember(vec2,eGroup)
                     c = c + 1;
                     cP(c,1) = i;
                 end
             end
         end
-    end
+    %end
 end
 
 if isempty(cP)
