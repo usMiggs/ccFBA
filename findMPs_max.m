@@ -58,6 +58,9 @@ model.S(smallMetIDs,:)=0;
 
 % Go through each reaction and find:
 for i=1:num_rxns
+    if isempty(find(model.S(:,i)))
+        continue
+    end 
     % Substrate/Product met names
     subIDs = find(model.S(:,i) < 0);
     substrates=model.mets(subIDs);
@@ -100,7 +103,7 @@ for i=1:num_rxns
 
     % Check if this is a transport reaction of a metabolite between
     % compartments (if yes: isTrans=1)
-    isTrans=findTransports(model);
+    isTrans=findTransports(model,i,type);
     
     % If it is not a transport reaction, AND if there are more than 1
     % participating metabolites in this reaction (e.g.: this is to exclude

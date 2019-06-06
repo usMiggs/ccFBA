@@ -1,4 +1,4 @@
-function [carbonConst] = ccFVA(model,bnds,condition,carbonCount,rlxBnds,rlxInt,cofPairs,minmax,runInitMM,runFinalMinMax,limEX,totalCarbon,intBnds,skipRxns)
+function [carbonConst] = ccFVA(model,bnds,condition,carbonCount,rlxBnds,rlxInt,cofPairs,minmax,runInitMM,runFinalMinMax,limEX,totalCarbon,intBnds,skipRxns,delimiter)
 %% This script is designed to constrain the solution space based on the 
 %   number of carbon atoms made available to the model by the exchange
 %   reactions. This is done in order to avoid physiologically meaningless
@@ -79,6 +79,13 @@ function [carbonConst] = ccFVA(model,bnds,condition,carbonCount,rlxBnds,rlxInt,c
 %                   skipped for carbon constraining (could be ussed for
 %                   reactions without a chemical formula for example)
 %
+%   delimiter   =   This variables default is '_' meaning metaboites in the
+%                   input model are contain the compartment information
+%                   after the underscroe (e.g. glc_D_c, or nadh_m). Often
+%                   models come with other delimiter such as square
+%                   brackets (e.g. glc_D[c], nadh[m]) and therfore this 
+%                   input should be carefully checked.
+% 
 % OUTPUT
 %   carbonConst =   structure containing the following fields
 %                       - Title
@@ -155,6 +162,9 @@ function [carbonConst] = ccFVA(model,bnds,condition,carbonCount,rlxBnds,rlxInt,c
 %               runInitMM is false the initial
 %               minmax variable will be set to
 %               the mdels lower and upper bounds
+%
+%   24-Mar-19   Addtion of delimiter variable       Maximilian Lularevic
+%               was added tot he function
 %
 
 %% check if minmax was passed into function and, run minmax if it hasn't
@@ -249,6 +259,17 @@ else
     skipRxns = [];
 end
 
+% check if delimiter variable was put into function
+if exist('delimiter','var')
+    if isempty(delimiter)
+        delimiter = '_';
+    end
+else
+    delimiter = '_';
+end
+
+
+
 %% extract lower and upper bnds from bnds variable
 if iscell(bnds)
     k = 0;
@@ -320,12 +341,12 @@ end
 if exist('cofPairs','var')
     if isempty(cofPairs)
         smallMets = findSmallMets(model);
-        metPairs = countMetPairs_max(model,smallMets.smallMetIDs,true,'_');
+        metPairs = findMPs_max(model,smallMets.smallMetIDs,true,delimiter);
         cofPairs = findCofactorPairs_max(model,metPairs);
     end
 else
     smallMets = findSmallMets(model);
-    metPairs = countMetPairs_max(model,smallMets.smallMetIDs,true,'_');
+    metPairs = findMPs_max(model,smallMets.smallMetIDs,true,delimiter);
     cofPairs = findCofactorPairs_max(model,metPairs);
 end
 

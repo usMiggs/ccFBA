@@ -45,7 +45,7 @@ valCount = hist(rxnIDs(:,1),C)';
 trgtRxns = C(valCount>1);
 
 % find logical vector for transportRxns
-isTrans  = findTrans(model);
+isTrans  = findTransports(model);
 
 %retrieve actual reactions containing electron transferring mlcls
 lrgMlcRxns= trgtRxns(~ismember(trgtRxns,find(isTrans)));
