@@ -1,3 +1,7 @@
+# IMPORTANT NOTICE #
+For an actively maintained version of the code please visit the up-to-date fork here:
+https://github.com/alex-kip/ccFBA
+
 # ccFBA
 Toolbox that performs carbon constraining on constraint-based metabolic models.
 
