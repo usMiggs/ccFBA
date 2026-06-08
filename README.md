@@ -1,6 +1,7 @@
 # IMPORTANT NOTICE #
-For an actively maintained version of the code please visit the up-to-date fork here:
-https://github.com/alex-kip/ccFBA
+For an actively maintained version of the code please visit the up-to-date forks here:
+1. Matlab fork: https://github.com/alex-kip/ccFBA
+2. Python fork: https://github.com/alex-kip/ccFBApy
 
 # ccFBA
 Toolbox that performs carbon constraining on constraint-based metabolic models.
